@@ -2,122 +2,227 @@
 <html lang="az">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HobbyHub | Maraq Dünyan</title>
+    
+    <link rel="icon" type="image/png" href="logo.png">
+
     <style>
         :root {
             --primary: #6c5ce7;
             --secondary: #a29bfe;
-            --bg: #f9f9f9;
+            --bg: #f4f7f6;
             --dark: #2d3436;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent; /* Mobil üçün toxunma effektini silir */
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg);
             color: var(--dark);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .main-wrapper {
+            flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
+            width: 100%;
         }
 
         .container {
-            background: white;
+            background: var(--white);
             padding: 30px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            width: 90%;
-            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 500px;
             text-align: center;
+            transition: 0.3s;
         }
 
         .step { display: none; }
-        .step.active { display: block; animation: fadeIn 0.5s; }
+        .step.active { display: block; animation: fadeIn 0.4s; }
+
+        h2 { margin-top: 0; color: var(--primary); font-size: 24px; }
+        p { color: #636e72; font-size: 16px; margin-bottom: 25px; }
 
         input, select {
-            width: 80%;
-            padding: 12px;
+            width: 100%;
+            padding: 15px;
             margin: 10px 0;
-            border: 2px solid #ddd;
-            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
             font-size: 16px;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--secondary);
+            outline: none;
         }
 
         button {
             background: var(--primary);
             color: white;
             border: none;
-            padding: 12px 30px;
-            border-radius: 10px;
+            padding: 15px 30px;
+            border-radius: 12px;
             cursor: pointer;
             font-size: 16px;
+            font-weight: 600;
+            width: 100%;
             transition: 0.3s;
+            margin-top: 15px;
         }
 
-        button:hover { background: var(--secondary); }
+        button:hover { background: #5a4bcf; }
+        button:active { transform: scale(0.98); }
 
         .hobby-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
             gap: 10px;
-            margin-top: 20px;
-            max-height: 300px;
+            margin-top: 10px;
+            max-height: 250px;
             overflow-y: auto;
             padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 12px;
         }
 
+        /* Scrollbar dizaynı */
+        .hobby-grid::-webkit-scrollbar { width: 6px; }
+        .hobby-grid::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+
         .hobby-item {
-            padding: 10px;
-            background: #eee;
-            border-radius: 8px;
+            padding: 12px 5px;
+            background: #f0f0f0;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             transition: 0.2s;
+            border: 2px solid transparent;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         .hobby-item.selected {
             background: var(--primary);
             color: white;
+            border-color: var(--primary);
         }
+
+        /* Təklif Bölməsi (Footer-da) */
+        .feedback-section {
+            width: 100%;
+            max-width: 500px;
+            margin-top: 40px;
+            padding: 20px;
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .feedback-section h3 { margin-top: 0; font-size: 18px; color: #333; }
+        
+        .feedback-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .feedback-form input, .feedback-form textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .feedback-form textarea { resize: vertical; height: 80px; }
+        
+        .feedback-form button {
+            padding: 10px;
+            font-size: 14px;
+            margin-top: 5px;
+            background: #2d3436; /* Daha fərqli rəng */
+        }
+        .feedback-form button:hover { background: #000; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Mobil Telefonlar Üçün Xüsusi Tənzimləmələr */
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .container { padding: 20px; border-radius: 15px; }
+            h2 { font-size: 20px; }
+            p { font-size: 14px; }
+            .hobby-item { font-size: 12px; padding: 10px 5px; }
+            button { padding: 12px; font-size: 15px; }
+            .hobby-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); max-height: 200px;}
+            .feedback-section { padding: 15px; }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div id="step1" class="step active">
-        <h2>Xoş Gəldiniz! 👋</h2>
-        <p>Gəlin tanış olaq.</p>
-        <input type="text" id="userName" placeholder="Adınız">
-        <input type="number" id="userAge" placeholder="Yaşınız">
-        <br><br>
-        <button onclick="nextStep(2)">Davam et</button>
-    </div>
+<div class="main-wrapper">
+    <div class="container">
+        <div id="step1" class="step active">
+            <h2>Xoş Gəldiniz! 👋</h2>
+            <p>Gəlin tanış olaq.</p>
+            <input type="text" id="userName" placeholder="Adınız">
+            <input type="number" id="userAge" placeholder="Yaşınız">
+            <button onclick="nextStep(2)">Davam et</button>
+        </div>
 
-    <div id="step2" class="step">
-        <h2>Hobbini Seç 🎨</h2>
-        <p>Səni kiminlə uyğunlaşdıraq? (Birdən çox seçə bilərsən)</p>
-        <div class="hobby-grid" id="hobbyGrid"></div>
-        <br>
-        <button onclick="showFinal()">Tamamla</button>
-    </div>
+        <div id="step2" class="step">
+            <h2>Hobbini Seç 🎨</h2>
+            <p>Səni kiminlə uyğunlaşdıraq? (Birdən çox seç)</p>
+            <div class="hobby-grid" id="hobbyGrid"></div>
+            <button onclick="showFinal()">Tamamla</button>
+        </div>
 
-    <div id="step3" class="step">
-        <h2 id="welcomeMsg"></h2>
-        <div id="recommendation" style="background: #f0fdf4; padding: 20px; border-radius: 15px;">
-            </div>
-        <br>
-        <button onclick="location.reload()">Yenidən başla</button>
+        <div id="step3" class="step">
+            <h2 id="welcomeMsg"></h2>
+            <div id="recommendation" style="background: #eef2f1; padding: 20px; border-radius: 12px; text-align: left;">
+                </div>
+            <button onclick="location.reload()">Yenidən başla</button>
+        </div>
     </div>
 </div>
 
+<div class="feedback-section">
+    <h3>Fikriniz Bizim Üçün Önəmlidir</h3>
+    <p style="font-size: 13px; margin-bottom: 15px;">Təklif və ya şikayətinizi birbaşa təsisçiyə göndərin.</p>
+    
+    <form class="feedback-form" id="feedbackForm">
+        <input type="text" name="name" placeholder="Adınız (istəyə bağlı)" id="feedbackName">
+        <textarea name="message" placeholder="Təklifiniz..." id="feedbackMessage" required></textarea>
+        <button type="submit" id="sendFeedbackBtn">Göndər</button>
+    </form>
+    <div id="feedbackStatus" style="margin-top: 10px; font-size: 14px; display: none;"></div>
+</div>
+
 <script>
+    // --- Hobbi Məlumatları ---
     const hobbies = [
         "Rəssamlıq", "Fotoqrafiya", "Musiqi", "Yazıçılıq", "Rəqs", 
         "Yoqa", "Qaçış", "Velosiped", "Üzgüçülük", "Şahmat", 
@@ -143,14 +248,20 @@
         grid.appendChild(div);
     });
 
+    // --- Addımlar Arası Keçid ---
     function nextStep(step) {
-        const name = document.getElementById('userName').value;
-        if(!name) { alert("Zəhmət olmasa adınızı qeyd edin!"); return; }
+        const name = document.getElementById('userName').value.trim();
+        const age = document.getElementById('userAge').value.trim();
+        
+        if(step === 2) {
+            if(!name || !age) { alert("Zəhmət olmasa adınızı və yaşınızı qeyd edin!"); return; }
+        }
         
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
         document.getElementById('step' + step).classList.add('active');
     }
 
+    // --- Son Addımı Göstərmək ---
     function showFinal() {
         if(selectedHobbies.size === 0) { alert("Heç olmasa 1 hobbi seçin!"); return; }
 
@@ -162,13 +273,68 @@
 
         document.getElementById('welcomeMsg').innerText = `Təbriklər, ${name}! 🎉`;
         
-        // Şəxsi təklif hissəsi
         let hobbyList = Array.from(selectedHobbies).join(", ");
+        
+        // Mətnin mobil telefonda çox uzun olmaması üçün sadələşdirdik
         document.getElementById('recommendation').innerHTML = `
-            <p>Sənin üçün <b>${age}</b> yaş qrupuna uyğun <b>${hobbyList}</b> sahəsində 12 yeni insan tapıldı!</p>
-            <p>🌟 <i>Süni İntellekt Tövsiyəsi:</i> Sənin maraqlarına görə bu həftə sonu keçiriləcək onlayn vebinara qatılmağın əla olar.</p>
+            <p style="margin: 0 0 10px 0;">Sənin üçün <b>${age}</b> yaş qrupuna uyğun <b>${hobbyList}</b> sahəsində yeni insanlar tapıldı!</p>
+            <p style="margin: 0; color: #16a085; font-style: italic; font-size: 14px;">
+                🌟 Süni İntellekt: Profili tamamla və ilk görüşə dəvət al.
+            </p>
         `;
     }
+
+    // --- Təklif Formasını Gmail-ə Göndərmək (Formspree) ---
+    const feedbackForm = document.getElementById('feedbackForm');
+    const feedbackStatus = document.getElementById('feedbackStatus');
+    const sendBtn = document.getElementById('sendFeedbackBtn');
+
+    // BURA ÖZ GMAİL ÜNVANINI YAZMALISAN
+    const myGmail = "kenanhuseynov629@gmail.com"; 
+
+    feedbackForm.addEventListener('submit', function(event) {
+        event.preventDefault(); // Səhifənin yenilənməsini dayandırır
+
+        const name = document.getElementById('feedbackName').value || "Anonim";
+        const message = document.getElementById('feedbackMessage').value;
+
+        if(!message) return; // Mesaj boşdursa göndərmə
+
+        sendBtn.innerText = "Göndərilir...";
+        sendBtn.disabled = true;
+
+        // Formspree API-sinə məlumat göndərmək
+        fetch(`https://formspree.io/f/` + btoa(myGmail).replace(/=/g, ""), { // Sadə şifrələmə (e-mail botları üçün)
+            method: 'POST',
+            body: JSON.stringify({ name: name, message: message }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            sendBtn.innerText = "Göndər";
+            sendBtn.disabled = false;
+            
+            if (response.ok) {
+                feedbackStatus.innerText = "Təşəkkürlər! Təklifiniz göndərildi.";
+                feedbackStatus.style.color = "#27ae60";
+                feedbackStatus.style.display = "block";
+                feedbackForm.reset(); // Formanı təmizlə
+            } else {
+                feedbackStatus.innerText = "Xəta baş verdi. Yenidən cəhd edin.";
+                feedbackStatus.style.color = "#c0392b";
+                feedbackStatus.style.display = "block";
+            }
+        })
+        .catch(error => {
+            sendBtn.innerText = "Göndər";
+            sendBtn.disabled = false;
+            feedbackStatus.innerText = "Server xətası. İnterneti yoxlayın.";
+            feedbackStatus.style.color = "#c0392b";
+            feedbackStatus.style.display = "block";
+        });
+    });
 </script>
 
 </body>

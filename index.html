@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HobbyHub | Maraq Dünyan</title>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --bg: #f9f9f9;
+            --dark: #2d3436;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .step { display: none; }
+        .step.active { display: block; animation: fadeIn 0.5s; }
+
+        input, select {
+            width: 80%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        button:hover { background: var(--secondary); }
+
+        .hobby-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .hobby-item {
+            padding: 10px;
+            background: #eee;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .hobby-item.selected {
+            background: var(--primary);
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="step1" class="step active">
+        <h2>Xoş Gəldiniz! 👋</h2>
+        <p>Gəlin tanış olaq.</p>
+        <input type="text" id="userName" placeholder="Adınız">
+        <input type="number" id="userAge" placeholder="Yaşınız">
+        <br><br>
+        <button onclick="nextStep(2)">Davam et</button>
+    </div>
+
+    <div id="step2" class="step">
+        <h2>Hobbini Seç 🎨</h2>
+        <p>Səni kiminlə uyğunlaşdıraq? (Birdən çox seçə bilərsən)</p>
+        <div class="hobby-grid" id="hobbyGrid"></div>
+        <br>
+        <button onclick="showFinal()">Tamamla</button>
+    </div>
+
+    <div id="step3" class="step">
+        <h2 id="welcomeMsg"></h2>
+        <div id="recommendation" style="background: #f0fdf4; padding: 20px; border-radius: 15px;">
+            </div>
+        <br>
+        <button onclick="location.reload()">Yenidən başla</button>
+    </div>
+</div>
+
+<script>
+    const hobbies = [
+        "Rəssamlıq", "Fotoqrafiya", "Musiqi", "Yazıçılıq", "Rəqs", 
+        "Yoqa", "Qaçış", "Velosiped", "Üzgüçülük", "Şahmat", 
+        "Proqramlaşdırma", "Astronomiya", "Süni İntellekt", "Robototexnika", "Kulinariya",
+        "Səyahət", "Bağbanlıq", "Kripto", "Dizayn", "Futbol",
+        "Tennis", "Dağçılıq", "DIY", "Kitab Klubu", "Filmlər",
+        "Moda", "Tarix", "Psixologiya", "Xarici Dillər", "Stolüstü Oyunlar"
+    ];
+
+    const selectedHobbies = new Set();
+
+    // Hobbi siyahısını generatsiya etmək
+    const grid = document.getElementById('hobbyGrid');
+    hobbies.forEach(hobby => {
+        const div = document.createElement('div');
+        div.className = 'hobby-item';
+        div.innerText = hobby;
+        div.onclick = () => {
+            div.classList.toggle('selected');
+            if(selectedHobbies.has(hobby)) selectedHobbies.delete(hobby);
+            else selectedHobbies.add(hobby);
+        };
+        grid.appendChild(div);
+    });
+
+    function nextStep(step) {
+        const name = document.getElementById('userName').value;
+        if(!name) { alert("Zəhmət olmasa adınızı qeyd edin!"); return; }
+        
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+        document.getElementById('step' + step).classList.add('active');
+    }
+
+    function showFinal() {
+        if(selectedHobbies.size === 0) { alert("Heç olmasa 1 hobbi seçin!"); return; }
+
+        const name = document.getElementById('userName').value;
+        const age = document.getElementById('userAge').value;
+        
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+        document.getElementById('step3').classList.add('active');
+
+        document.getElementById('welcomeMsg').innerText = `Təbriklər, ${name}! 🎉`;
+        
+        // Şəxsi təklif hissəsi
+        let hobbyList = Array.from(selectedHobbies).join(", ");
+        document.getElementById('recommendation').innerHTML = `
+            <p>Sənin üçün <b>${age}</b> yaş qrupuna uyğun <b>${hobbyList}</b> sahəsində 12 yeni insan tapıldı!</p>
+            <p>🌟 <i>Süni İntellekt Tövsiyəsi:</i> Sənin maraqlarına görə bu həftə sonu keçiriləcək onlayn vebinara qatılmağın əla olar.</p>
+        `;
+    }
+</script>
+
+</body>
+</html>
